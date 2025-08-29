@@ -11,6 +11,8 @@ async def search_message(client, message):
         return
 
     query = message.text.lower().strip()
+    
+    # Database ထဲက အနီးစပ်ဆုံး Movie တွေကို ရှာဖွေခြင်း
     results = await db.get_files(query)
     
     if results:
@@ -19,17 +21,18 @@ async def search_message(client, message):
         buttons = []
 
         for result in results:
-            movie_name = result.get("movie_name", "N/A")
+            movie_name = result.get("file_name", "N/A")
             file_size = result.get("file_size", "N/A")
-            message_id = result.get("message_id")
+            message_id = result.get("file_id")
             
-            response_text += f"🎬 **Movie:** {movie_name}\n"
-            response_text += f"🗂️ **Size:** {file_size}\n\n"
+            # User အတွက် ပြသမယ့်စာသား
+            response_text += f"**🎬 Movie:** {file_name}\n"
+            response_text += f"**🗂️ Size:** {file_size}\n\n"
 
+            # Admin အတွက် link button ကိုပါ ထည့်ပေးခြင်း
             if is_admin and message_id:
-                channel_id_for_link = os.environ.get("DATABASE_CHANNEL_ID").replace('-100', '')
-                link = f"https://t.me/c/{channel_id_for_link}/{message_id}"
-                buttons.append([InlineKeyboardButton(f"🔗 {movie_name}", url=link)])
+                link = f"https://t.me/c/{os.environ.get('DATABASE_CHANNEL_ID').replace('-100', '')}/{file_id}"
+                buttons.append([InlineKeyboardButton(f"🔗 {file_name}", url=link)])
 
         if is_admin:
             await message.reply_text(
@@ -43,4 +46,4 @@ async def search_message(client, message):
     else:
         await message.reply_text("Sorry, no movies were found with that name.")
 
-search_message_handler = MessageHandler(search_message, filters.private & filters.text & ~filters.command(["start", "addfile"]))
+search_message_handler = MessageHandler(search_message, filters.private & filters.text & ~filters.command(["start"]))
