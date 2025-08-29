@@ -14,18 +14,18 @@ async def add_file(client, message):
 
     # message မှာ document ပါမပါ စစ်ဆေးခြင်း
     if message.document:
-        movie_name = message.document.file_name
+        file_name = message.document.file_name
         file_size = f"{message.document.file_size / (1024*1024):.2f} MB" if message.document.file_size else "N/A"
         
         # database channel ထဲကို file ကို copy လုပ်ခြင်း
         copied_message = await client.copy_message(
             chat_id=DATABASE_CHANNEL_ID,
             from_chat_id=message.chat.id,
-            message_id=message.id
+            file_id=message.id
         )
 
         # database ထဲကို file information ထည့်ခြင်း
-        await db.add_file(movie_name, file_size, copied_message.id)
+        await db.add_file(file_name, file_size, copied_message.id)
         
         await message.reply_text(
             f"**File added to database:**\n\n"
