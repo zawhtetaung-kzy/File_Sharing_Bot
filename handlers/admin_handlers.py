@@ -29,10 +29,12 @@ async def add_file(client, message):
         
         await message.reply_text(
             f"**File added to database:**\n\n"
-            f"**🎬 Movie:** {movie_name}\n"
+            f"**🎬 Movie:** {file_name}\n"
             f"**🗂️ Size:** {file_size}\n"
-            f"**✅ Status:** Successfully Added!"
+            f"**✅ Status:** Successfully Added!\n"
+            #me update
+            f"**Caption:** {caption}\n"
+            f"**Fine** {files['file_name']}\n"
         )
 
 add_file_handler = MessageHandler(add_file, filters.private & filters.user(ADMIN_ID) & filters.document)
-
