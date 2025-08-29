@@ -21,16 +21,16 @@ async def search_message(client, message):
         buttons = []
 
         for result in results:
-            movie_name = result.get("file_name", "N/A")
+            file_name = result.get("file_name", "N/A")
             file_size = result.get("file_size", "N/A")
-            message_id = result.get("file_id")
+            file_id = result.get("file_id")
             
             # User အတွက် ပြသမယ့်စာသား
             response_text += f"**🎬 Movie:** {file_name}\n"
             response_text += f"**🗂️ Size:** {file_size}\n\n"
 
             # Admin အတွက် link button ကိုပါ ထည့်ပေးခြင်း
-            if is_admin and message_id:
+            if is_admin and file_id:
                 link = f"https://t.me/c/{os.environ.get('DATABASE_CHANNEL_ID').replace('-100', '')}/{file_id}"
                 buttons.append([InlineKeyboardButton(f"🔗 {file_name}", url=link)])
 
