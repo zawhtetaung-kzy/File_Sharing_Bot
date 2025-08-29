@@ -10,7 +10,7 @@ class Database:
     async def add_file(self, file_name, file_size, file_id):
         await self.files_col.update_one(
             {"file_name": file_name},
-            {"$set": {"file_size": file_size, "file_id": message_id}},
+            {"$set": {"file_size": file_size, "file_id": file_id}},
             upsert=True,
         )
 
