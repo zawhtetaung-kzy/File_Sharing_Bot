@@ -15,6 +15,10 @@ class Database:
         )
 
     async def get_files(self, query):
-        return self.files_col.find({"movie_name": {"$regex": query, "$options": "i"}}).to_list(length=10)
+        # find() ကနေ ရလာတဲ့ cursor object ကို list အနေနဲ့ ပြောင်းပေးခြင်း
+        return await self.files_col.find({"movie_name": {"$regex": query, "$options": "i"}}).to_list(length=10)
+    
+    async def get_file_by_message_id(self, message_id):
+        return await self.files_col.find_one({"message_id": message_id})
 
 db = Database()
